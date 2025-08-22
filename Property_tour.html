@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Property Tour – Map & Directions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --brand:#007bff;
+      --brand-dark:#0056b3;
+      --text:#1f2937;
+      --bg:#f8fafc;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:var(--bg);
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    header{text-align:center;margin-bottom:18px}
+    h1{margin:8px 0 6px}
+    p.lead{margin:0;color:#475569}
+    .cta-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px 0 8px}
+    .btn{
+      display:inline-block;padding:14px 28px;border-radius:999px;
+      text-decoration:none;font-weight:600;font-size:16px;
+      background:var(--brand);color:#fff;
+    }
+    .btn:hover{background:var(--brand-dark)}
+    .btn.outline{
+      background:#fff;color:var(--brand);border:2px solid var(--brand)
+    }
+    .btn.outline:hover{background:var(--brand);color:#fff}
+    .card{
+      background:#fff;border-radius:14px;box-shadow:0 6px 20px rgba(0,0,0,.06);
+      padding:14px;margin:14px 0;
+    }
+    iframe.map{width:100%;height:600px;border:0;border-radius:12px}
+    h2{margin:10px 0 8px;text-align:center}
+    .buttons{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:10px 0 6px}
+    footer{font-size:12px;color:#64748b;text-align:center;margin:18px 0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Property Tour</h1>
+      <p class="lead">View all properties on the map, or tap a button to start GPS directions from your current location.</p>
+      <div class="cta-row">
+        <!-- Opens the full map in a new tab (optional “View Properties Map” button) -->
+        <a class="btn outline" target="_blank"
+           href="https://www.google.com/maps/d/viewer?mid=15SZrgQiGyaMkdHw3aIjDV_evRceAaZY">
+          View Properties Map (Full Screen)
+        </a>
+      </div>
+    </header>
+
+    <!-- Embedded map on the landing page -->
+    <div class="card">
+      <iframe
+        class="map"
+        src="https://www.google.com/maps/d/embed?mid=15SZrgQiGyaMkdHw3aIjDV_evRceAaZY&ehbc=2E312F&noprof=1"
+        allowfullscreen
+        loading="lazy">
+      </iframe>
+    </div>
+
+    <!-- Quick Directions buttons (Current Location -> Property) -->
+    <h2>Quick Directions</h2>
+    <div class="card">
+      <div class="buttons">
+        <!-- REPLACE the destinations below with your real addresses OR lat,lng -->
+        <!-- Address example (spaces OK): destination=123 Main St, Oakland, CA -->
+        <!-- Coordinate example: destination=37.846,-122.268 -->
+
+        <a class="btn" target="_blank"
+           href="https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=627 59th St, Oakland, CA 94609">
+          Property 1
+        </a>
+
+        <a class="btn" target="_blank"
+           href="https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=406 62nd St, Oakland, CA 94606">
+          Property 2
+        </a>
+
+        <a class="btn" target="_blank
+           "href="https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=1313 Derby St, Berkeley, CA 94702">
+          Property 3
+        </a>
+
+        <a class="btn" target="_blank"
+           href="https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=2101 Blake St, Berkeley, CA 94704">
+          Property 4
+        </a>
+
+        <a class="btn" target="_blank"
+           href="https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=3030 Telegraph Ave, Oakland, CA 94609">
+          Property 5
+        </a>
+      </div>
+    </div>
+
+    <footer>
+      Tip: You can also use coordinates like <code>37.846,-122.268</code> for the destination if you prefer exact pin locations.
+    </footer>
+  </div>
+</body>
+</html>
+
+
+
