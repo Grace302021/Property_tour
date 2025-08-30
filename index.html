@@ -7,6 +7,13 @@
   <style>
     body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
     h2 { color: #333; }
+
+    .instructions {
+      font-size: 16px;
+      margin-bottom: 15px;
+      color: #555;
+    }
+
     .map-container {
       width: 100%;
       max-width: 900px;
@@ -21,24 +28,46 @@
       height: 100%;
       border: 0;
     }
+
+    .btn-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
     .btn {
-      display: block;
-      margin: 10px auto;
       padding: 12px 20px;
       background: #4CAF50;
       color: white;
       text-decoration: none;
       border-radius: 25px;
-      width: 280px;
+      min-width: 220px;
       font-size: 16px;
       transition: 0.3s;
+      text-align: center;
     }
     .btn:hover { background: #45a049; }
+
+    .map-link {
+      display: inline-block;
+      margin-top: 15px;
+      font-size: 15px;
+      color: #0066cc;
+      text-decoration: none;
+    }
+    .map-link:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
   <h2>Property Tour Directions</h2>
+
+  <!-- ✅ Instructional text -->
+  <p class="instructions">
+    View all properties on the map, or tap a button to start GPS directions from your current location.
+  </p>
 
   <!-- ✅ Map Canvas -->
   <div class="map-container">
@@ -48,8 +77,13 @@
     </iframe>
   </div>
 
+  <!-- ✅ Fullscreen map link -->
+  <a class="map-link" href="https://www.google.com/maps/d/viewer?mid=15SZrgQiGyaMkdHw3aIjDV_evRceAaZY" target="_blank">
+    View Properties Map (Full Screen)
+  </a>
+
   <!-- ✅ Property Buttons -->
-  <div id="buttons">Loading properties...</div>
+  <div id="buttons" class="btn-container">Loading properties...</div>
 
   <script>
     // Live KML link
@@ -79,7 +113,7 @@
           btn.href = url;
           btn.target = "_blank";
           btn.className = "btn";
-          btn.textContent = "View " + name + " Directions";
+          btn.textContent = name;
           container.appendChild(btn);
         }
       })
@@ -91,3 +125,4 @@
 
 </body>
 </html>
+
