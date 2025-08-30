@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Property Directions</title>
+  <title>Property Tour Directions</title>
   <style>
     body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
     h2 { color: #333; }
@@ -19,9 +19,7 @@
       font-size: 16px;
       transition: 0.3s;
     }
-    .btn:hover {
-      background: #45a049;
-    }
+    .btn:hover { background: #45a049; }
   </style>
 </head>
 <body>
@@ -30,11 +28,9 @@
   <div id="buttons">Loading properties...</div>
 
   <script>
-    // ✅ Your live KML link
-    const KML_URL = "https://www.google.com/maps/d/u/0/kml?mid=15SZrgQiGyaMkdHw3aIjDV_evRceAaZY&forcekml=1";
-
-    // ✅ Use proxy to bypass Google CORS restrictions
-    const PROXY = "https://api.allorigins.win/raw?url=" + encodeURIComponent(KML_URL);
+    //  Updated live KML link (public view + forcekml)
+    const KML_URL = "https://www.google.com/maps/d/kml?mid=15SZrgQiGyaMkdHw3aIjDV_evRceAaZY&forcekml=1";
+    const PROXY = "https://corsproxy.io/?" + encodeURIComponent(KML_URL);
 
     fetch(PROXY)
       .then(response => response.text())
@@ -42,32 +38,29 @@
       .then(data => {
         const placemarks = data.getElementsByTagName("Placemark");
         const container = document.getElementById("buttons");
-        container.innerHTML = ""; // clear loading text
+        container.innerHTML = "";
 
         for (let i = 0; i < placemarks.length; i++) {
-          let nameTag = placemarks[i].getElementsByTagName("name")[0];
-          let coordsTag = placemarks[i].getElementsByTagName("coordinates")[0];
+          const nameTag = placemarks[i].getElementsByTagName("name")[0];
+          const coordsTag = placemarks[i].getElementsByTagName("coordinates")[0];
+          if (!nameTag || !coordsTag) continue;
 
-          if (nameTag && coordsTag) {
-            let name = nameTag.textContent;
-            let coords = coordsTag.textContent.trim();
-            let [lng, lat] = coords.split(",");
+          const name = nameTag.textContent;
+          const coords = coordsTag.textContent.trim();
+          const [lng, lat] = coords.split(",");
 
-            // ✅ Google Maps Directions link
-            let url = `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${lat},${lng}`;
+          const url = `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${lat},${lng}`;
 
-            // ✅ Create button
-            let btn = document.createElement("a");
-            btn.href = url;
-            btn.target = "_blank";
-            btn.className = "btn";
-            btn.textContent = name;
-            container.appendChild(btn);
-          }
+          const btn = document.createElement("a");
+          btn.href = url;
+          btn.target = "_blank";
+          btn.className = "btn";
+          btn.textContent = name;
+          container.appendChild(btn);
         }
       })
       .catch(err => {
-        document.getElementById("buttons").innerHTML = "⚠️ Failed to load properties. Please check the KML link.";
+        document.getElementById("buttons").innerHTML = "⚠️ Failed to load properties. Make sure the map is public.";
         console.error(err);
       });
   </script>
