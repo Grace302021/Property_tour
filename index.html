@@ -50,14 +50,12 @@
     }
     .btn:hover { background: #45a049; }
 
-    .map-link {
-      display: inline-block;
-      margin-top: 15px;
-      font-size: 15px;
-      color: #0066cc;
-      text-decoration: none;
+    .map-btn {
+      background: #0077cc;
     }
-    .map-link:hover { text-decoration: underline; }
+    .map-btn:hover {
+      background: #005fa3;
+    }
   </style>
 </head>
 <body>
@@ -69,6 +67,11 @@
     View all properties on the map, or tap a button to start GPS directions from your current location.
   </p>
 
+  <!-- ✅ Fullscreen map button (moved here) -->
+  <a class="btn map-btn" href="https://www.google.com/maps/d/viewer?mid=15SZrgQiGyaMkdHw3aIjDV_evRceAaZY" target="_blank">
+    View Properties Map (Full Screen)
+  </a>
+
   <!-- ✅ Map Canvas -->
   <div class="map-container">
     <iframe 
@@ -76,11 +79,6 @@
       allowfullscreen>
     </iframe>
   </div>
-
-  <!-- ✅ Fullscreen map link -->
-  <a class="map-link" href="https://www.google.com/maps/d/viewer?mid=15SZrgQiGyaMkdHw3aIjDV_evRceAaZY" target="_blank">
-    View Properties Map (Full Screen)
-  </a>
 
   <!-- ✅ Property Buttons -->
   <div id="buttons" class="btn-container">Loading properties...</div>
