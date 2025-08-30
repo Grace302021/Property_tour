@@ -30,10 +30,13 @@
   <div id="buttons">Loading properties...</div>
 
   <script>
-    // ✅ Live updating KML link from your Google My Map
+    // ✅ Your live KML link
     const KML_URL = "https://www.google.com/maps/d/u/0/kml?mid=15SZrgQiGyaMkdHw3aIjDV_evRceAaZY&forcekml=1";
 
-    fetch(KML_URL)
+    // ✅ Use proxy to bypass Google CORS restrictions
+    const PROXY = "https://api.allorigins.win/raw?url=" + encodeURIComponent(KML_URL);
+
+    fetch(PROXY)
       .then(response => response.text())
       .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
       .then(data => {
@@ -50,10 +53,10 @@
             let coords = coordsTag.textContent.trim();
             let [lng, lat] = coords.split(",");
 
-            // Google Maps Directions link
+            // ✅ Google Maps Directions link
             let url = `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${lat},${lng}`;
 
-            // Create button
+            // ✅ Create button
             let btn = document.createElement("a");
             btn.href = url;
             btn.target = "_blank";
@@ -71,3 +74,4 @@
 
 </body>
 </html>
+
