@@ -14,13 +14,19 @@
       color: #555;
     }
 
-    #map {
+    .map-container {
       width: 100%;
       max-width: 900px;
       height: 500px;
       margin: 20px auto;
       border: 2px solid #ccc;
       border-radius: 10px;
+      overflow: hidden;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
     }
 
     .btn-container {
@@ -61,13 +67,18 @@
     View all properties on the map, or tap a button to start GPS directions from your current location.
   </p>
 
-  <!-- ✅ Fullscreen map button -->
+  <!-- ✅ Fullscreen map button (moved here) -->
   <a class="btn map-btn" href="https://www.google.com/maps/d/viewer?mid=15SZrgQiGyaMkdHw3aIjDV_evRceAaZY" target="_blank">
     View Properties Map (Full Screen)
   </a>
 
-  <!-- ✅ Custom Google Map (no profile photo/name) -->
-  <div id="map"></div>
+  <!-- ✅ Map Canvas -->
+  <div class="map-container">
+    <iframe 
+      src="https://www.google.com/maps/d/u/0/embed?mid=15SZrgQiGyaMkdHw3aIjDV_evRceAaZY&ehbc=2E312F" 
+      allowfullscreen>
+    </iframe>
+  </div>
 
   <!-- ✅ Property Buttons -->
   <div id="buttons" class="btn-container">Loading properties...</div>
@@ -77,73 +88,37 @@
     const KML_URL = "https://www.google.com/maps/d/kml?mid=15SZrgQiGyaMkdHw3aIjDV_evRceAaZY&forcekml=1";
     const PROXY = "https://corsproxy.io/?" + encodeURIComponent(KML_URL);
 
-    let map;
+    fetch(PROXY)
+      .then(response => response.text())
+      .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+      .then(data => {
+        const placemarks = data.getElementsByTagName("Placemark");
+        const container = document.getElementById("buttons");
+        container.innerHTML = "";
 
-    function initMap() {
-      map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 37.8044, lng: -122.2711 }, // Oakland default
-        zoom: 12,
+        for (let i = 0; i < placemarks.length; i++) {
+          const nameTag = placemarks[i].getElementsByTagName("name")[0];
+          const coordsTag = placemarks[i].getElementsByTagName("coordinates")[0];
+          if (!nameTag || !coordsTag) continue;
+
+          const name = nameTag.textContent;
+          const coords = coordsTag.textContent.trim();
+          const [lng, lat] = coords.split(",");
+
+          const url = `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${lat},${lng}`;
+
+          const btn = document.createElement("a");
+          btn.href = url;
+          btn.target = "_blank";
+          btn.className = "btn";
+          btn.textContent = name;
+          container.appendChild(btn);
+        }
+      })
+      .catch(err => {
+        document.getElementById("buttons").innerHTML = "⚠️ Failed to load properties. Make sure the map is public.";
+        console.error(err);
       });
-
-      // Load property pins from KML
-      fetch(PROXY)
-        .then(response => response.text())
-        .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-        .then(data => {
-          const placemarks = data.getElementsByTagName("Placemark");
-          const container = document.getElementById("buttons");
-          container.innerHTML = "";
-
-          const bounds = new google.maps.LatLngBounds();
-
-          for (let i = 0; i < placemarks.length; i++) {
-            const nameTag = placemarks[i].getElementsByTagName("name")[0];
-            const coordsTag = placemarks[i].getElementsByTagName("coordinates")[0];
-            if (!nameTag || !coordsTag) continue;
-
-            const name = nameTag.textContent;
-            const coords = coordsTag.textContent.trim();
-            const [lng, lat] = coords.split(",").map(Number);
-
-            // Add marker to the map
-            const marker = new google.maps.Marker({
-              position: { lat: lat, lng: lng },
-              map,
-              title: name,
-            });
-
-            // Info window
-            const infowindow = new google.maps.InfoWindow({
-              content: `<b>${name}</b>`,
-            });
-            marker.addListener("click", () => {
-              infowindow.open(map, marker);
-            });
-
-            bounds.extend(marker.position);
-
-            // Add GPS button
-            const url = `https://www.google.com/maps/dir/?api=1&origin=Current+Location&destination=${lat},${lng}`;
-            const btn = document.createElement("a");
-            btn.href = url;
-            btn.target = "_blank";
-            btn.className = "btn";
-            btn.textContent = name;
-            container.appendChild(btn);
-          }
-
-          map.fitBounds(bounds);
-        })
-        .catch(err => {
-          document.getElementById("buttons").innerHTML = "⚠️ Failed to load properties. Make sure the map is public.";
-          console.error(err);
-        });
-    }
-  </script>
-
-  <!-- ✅ Load Google Maps JS API with your key -->
-  <script async 
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCMsenqocoPPxQoRoTT7wFI8HpMsD1JS6U&callback=initMap">
   </script>
 
 </body>
